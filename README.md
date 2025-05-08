@@ -29,3 +29,6 @@ A searchable archive of past UIL competition results
   - Implement a Web Scraper to get past contest results from existing archives with Python (?)
   - Implement filters and sorters for each section with JavaScript or React (?)
   - Add CSS for each page
+
+## Project Link
+  - Live Website: https://uil-enhanced-archives.netlify.app/
