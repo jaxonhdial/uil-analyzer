@@ -1,0 +1,12 @@
+.present {
+    background-color: green;
+}
+.absent {
+    background: red;
+}
+#live-results {
+    margin-top: 0;
+}
+#live-results-header {
+    margin-bottom: 0;
+}

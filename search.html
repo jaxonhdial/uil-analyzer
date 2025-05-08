@@ -3,57 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Search</title>
 </head>
 <body>
+    <h1 class="title">Search for a Competitor or School</h1>
     <p><a href="index.html">Return to home page</a></p>
-    <br>
-
-    <label for="year">Choose a year:</label>
-    <select name="year" id="year">
-        <option value="2025">2025</option>
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
-    </select>
-    <br>
-
-    <label for="event">Choose an event:</label>
-    <select name="event" id="event">
-        <option value="Computer Science">Computer Science</option>
-    </select>
-    <br><br>
-
-    <label><input type="radio" name="conference" value="1A">1A</label>
-    <label><input type="radio" name="conference" value="2A">2A</label>
-    <label><input type="radio" name="conference" value="3A">3A</label>
-    <label><input type="radio" name="conference" value="4A">4A</label>
-    <label><input type="radio" name="conference" value="5A">5A</label>
-    <label><input type="radio" name="conference" value="6A">6A</label>
-    <br><br>
-
     <form>
         <label>
-            <input type="radio" name="level" value="district">
-            District Results:
-            <input type="text" name="districtInput" placeholder="Enter District Number">
+            <input type="radio" name="option" value="student">
+            Search Competitor:
+            <input type="text" name="optionInput" placeholder="Enter Competitor Name...">
         </label>
         <br>
         <label>
-            <input type="radio" name="level" value="region">
-            Region Results:
-            <input type="text" name="regionInput" placeholder="Enter Region Number">
-        </label>
-        <br>
-        <label>
-            <input type="radio" name="level" value="state">
-            State Results
+            <input type="radio" name="option" value="school">
+            Search School:
+            <input type="text" name="optionInput" placeholder="Enter School Name...">
         </label>
         <br>
     </form>
-    <br>
-
     <button>Search</button>
-    <button>Export as CSV</button>
-
 </body>
 </html>

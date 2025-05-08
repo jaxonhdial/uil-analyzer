@@ -3,9 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Archives</title>
 </head>
 <body>
+    <h1 class="title">Virtual Contest</h1>
     <p><a href="index.html">Return to home page</a></p>
+    <br>
+
+    <label for="year">Choose a year:</label>
+    <select name="year" id="year">
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+    </select>
+    <br>
+
+    <label for="event">Choose an event:</label>
+    <select name="event" id="event">
+        <option value="Computer Science">Computer Science</option>
+    </select>
+    <br><br>
+
+    <label><input type="checkbox" name="conference" value="1A">1A</label>
+    <label><input type="checkbox" name="conference" value="2A">2A</label>
+    <label><input type="checkbox" name="conference" value="3A">3A</label>
+    <label><input type="checkbox" name="conference" value="4A">4A</label>
+    <label><input type="checkbox" name="conference" value="5A">5A</label>
+    <label><input type="checkbox" name="conference" value="6A">6A</label>
+    <br><br>
+
+    <form>
+        <label>
+            <input type="radio" name="level" value="district">
+            Districts:
+            <input type="text" name="districtInput" placeholder="Enter District Numbers">
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="level" value="region">
+            Regions:
+            <input type="text" name="regionInput" placeholder="Enter Region Numbers">
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="level" value="state">
+            State
+        </label>
+        <br>
+    </form>
+    <br>
+    <form>
+        <label>
+            <input type="radio" name="placement" value="number">
+            Placements: 
+            <input type="test" placeholder="Enter placements...">
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="placement" value="advancers">
+            Advancers
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="placement" value="all">
+            All
+        </label>
+    </form>
+    
+    <br>
+
+    <br>
+    <button>Search</button>
+    <button>Export as CSV</button>
+
 </body>
 </html>
