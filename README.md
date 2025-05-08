@@ -24,3 +24,8 @@ A searchable archive of past UIL competition results
 
   - Academic Alignments:
     - Type in a school name and see what district and region they're in as well as the other schools in their district
+
+## To Do
+  - Implement a Web Scraper to get past contest results from existing archives with Python (?)
+  - Implement filters and sorters for each section with JavaScript or React (?)
+  - Add CSS for each page
