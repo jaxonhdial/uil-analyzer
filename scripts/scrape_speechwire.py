@@ -1,4 +1,5 @@
 import requests
+import sys
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -95,7 +96,7 @@ def get_speechwire_url(event, conference, district_number, region_number, state_
     return base + "&groupingid=" + str(e_code) + "&seasonid=" + str(y_code) + "&conference=" + str(conference) + "&district=" + str(district_number) + "&region=" + str(region_number) + "&state=" + str(state_number)
 
 # URL and headers
-url = get_speechwire_url("Computer Science", 5, 0, 0, 1, 2024)
+url = get_speechwire_url(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]))
 
 headers = {
     "User-Agent": "Mozilla/5.0"
