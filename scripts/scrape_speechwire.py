@@ -8,6 +8,7 @@ def get_speechwire_url(event, conference, district_number, region_number, state_
 
     Args:
         event: String that has the name of the event
+        conference: 1-6 for 1A-6A
         district_number: 0 if not district
         region_number: 0 if not region
         state_number: 0 if not state; 1 otherwise
