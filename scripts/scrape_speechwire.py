@@ -96,7 +96,18 @@ def get_speechwire_url(event, conference, district_number, region_number, state_
     return base + "&groupingid=" + str(e_code) + "&seasonid=" + str(y_code) + "&conference=" + str(conference) + "&district=" + str(district_number) + "&region=" + str(region_number) + "&state=" + str(state_number)
 
 # URL and headers
-url = get_speechwire_url(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]))
+try:
+    event = sys.argv[1]
+    conference = sys.argv[2]
+    district_number = sys.argv[3]
+    region_number = sys.argv[4]
+    state_number = sys.argv[5]
+    year = sys.argv[6]
+except IndexError:
+    print("IndexError: no parameters given in the command line for the type of competition")
+    raise
+
+url = get_speechwire_url(event, int(conference), int(district_number), int(region_number), int(state_number), int(year))
 
 headers = {
     "User-Agent": "Mozilla/5.0"

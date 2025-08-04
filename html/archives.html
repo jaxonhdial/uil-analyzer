@@ -8,76 +8,91 @@
 <body>
     <h1 class="title">Archives</h1>
     <p><a href="../index.html">Return to home page</a></p>
-    <br>
+
     <form id="scrape-form">
-        <label for="year">Choose a year:</label>
-        <select name="year" id="year">
-            <option value="2025">2025</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-        </select>
-        <br>
+        <div class="form-group">
+            <label for="year">Choose a year:</label>
+            <select name="year" id="year">
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
 
-        <label for="event">Choose an event:</label>
-        <select name="event" id="event">
-            <option value="Accounting">Accounting</option>
-            <option value="Calculator Applications">Calculator Applications</option>
-            <option value="Computer Science">Computer Science</option>
-            <option value="Copy Editing">Copy Editing</option>
-            <option value="Current Issues and Events">Current Issues and Events</option>
-            <option value="Editorial">Editorial</option>
-            <option value="Feature Writing">Feature Writing</option>
-            <option value="Headline Writing">Headline Writing</option>
-            <option value="Informative Speaking">Informative Speaking</option>
-            <option value="Lincoln Douglas Debate">Lincoln Douglas Debate</option>
-            <option value="Literary Criticism">Literary Criticism</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="News Writing">News Writing</option>
-            <option value="Number Sense">Number Sense</option>
-            <option value="Persuasive Speaking">Persuasive Speaking</option>
-            <option value="Poetry Interpretation">Poetry Interpretation</option>
-            <option value="Prose Interpretation">Prose Interpretation</option>
-            <option value="Ready Writing">Ready Writing</option>
-            <option value="Science">Science</option>
-            <option value="Social Studies">Social Studies</option>
-            <option value="Spelling">Spelling</option>
-            <option value="Overall school sweepstakes">Overall school sweepstakes</option>
-            <option value="Speech team results">Speech team results</option>
-            <option value="Journalism team results">Journalism team results</option>
-        </select>
-        <br><br>
+        <div class="form-group">
+            <label for="event">Choose an event:</label>
+            <select name="event" id="event">
+                <option value="Accounting">Accounting</option>
+                <option value="Calculator Applications">Calculator Applications</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Copy Editing">Copy Editing</option>
+                <option value="Current Issues and Events">Current Issues and Events</option>
+                <option value="Editorial">Editorial</option>
+                <option value="Feature Writing">Feature Writing</option>
+                <option value="Headline Writing">Headline Writing</option>
+                <option value="Informative Speaking">Informative Speaking</option>
+                <option value="Lincoln Douglas Debate">Lincoln Douglas Debate</option>
+                <option value="Literary Criticism">Literary Criticism</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="News Writing">News Writing</option>
+                <option value="Number Sense">Number Sense</option>
+                <option value="Persuasive Speaking">Persuasive Speaking</option>
+                <option value="Poetry Interpretation">Poetry Interpretation</option>
+                <option value="Prose Interpretation">Prose Interpretation</option>
+                <option value="Ready Writing">Ready Writing</option>
+                <option value="Science">Science</option>
+                <option value="Social Studies">Social Studies</option>
+                <option value="Spelling">Spelling</option>
+                <option value="Overall school sweepstakes">Overall school sweepstakes</option>
+                <option value="Speech team results">Speech team results</option>
+                <option value="Journalism team results">Journalism team results</option>
+            </select>
+        </div>
 
-        <label><input type="radio" name="conference" value="1A">1A</label>
-        <label><input type="radio" name="conference" value="2A">2A</label>
-        <label><input type="radio" name="conference" value="3A">3A</label>
-        <label><input type="radio" name="conference" value="4A">4A</label>
-        <label><input type="radio" name="conference" value="5A">5A</label>
-        <label><input type="radio" name="conference" value="6A">6A</label>
-        <br><br>
+        <fieldset id="conference-fieldset">
+            <legend>Conference</legend>
+            <label><input type="radio" name="conference" value="1A">1A</label>
+            <label><input type="radio" name="conference" value="2A">2A</label>
+            <label><input type="radio" name="conference" value="3A">3A</label>
+            <label><input type="radio" name="conference" value="4A">4A</label>
+            <label><input type="radio" name="conference" value="5A">5A</label>
+            <label><input type="radio" name="conference" value="6A">6A</label>
+        </fieldset>
+        
+        <fieldset id="level-fieldset">
+            <legend>Level</legend>
+            <div class="level-option">
+                <label for="levelDistrict">
+                    <input type="radio" id="levelDistrict" name="level" value="district">
+                    District Results
+                </label>
+                <div id="districtInputContainer" style="display: none">
+                    <input type="number" min="1" max="32" id="districtInput" name="districtInput" placeholder="Enter District Number..." value="">
+                </div>
+            </div>
 
-        <form>
-            <label>
-                <input type="radio" name="level" value="district">
-                District Results:
-                <input type="text" name="districtInput" placeholder="Enter District Number...">
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="level" value="region">
-                Region Results:
-                <input type="text" name="regionInput" placeholder="Enter Region Number...">
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="level" value="state">
-                State Results
-            </label>
-            <br>
-        </form>
-        <br>
+            <div class="level-option">
+                <label for="levelRegion">
+                    <input type="radio" id="levelRegion" name="level" value="region">
+                    Region Results
+                </label>
+                <div id="regionInputContainer" style="display: none">
+                    <input type="number" min="1" max="4" id="regionInput" name="regionInput" placeholder="Enter Region Number..." value="">
+                </div>
+            </div>
 
-        <button type="button" id="show-table-btn">Search</button>
-        <button type="submit" id="download-btn">Export as CSV</button>
+            <div class="level-option">
+                <label for="levelState">
+                    <input type="radio" id="levelState" name="level" value="state">
+                    State Results
+                </label>
+            </div>
+        </fieldset>
+
+        <div class="actions">
+            <button type="button" id="show-table-btn">Search</button>
+            <button type="submit" id="download-btn">Export as CSV</button>
+        </div>
     </form>
 
     <script src="../scripts/archives.js"></script>
