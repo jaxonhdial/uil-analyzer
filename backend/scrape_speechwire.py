@@ -3,21 +3,22 @@ import sys
 from bs4 import BeautifulSoup
 import pandas as pd
 
-def get_speechwire_url(event, conference, district_number, region_number, state_number, year):
+def get_speechwire_url(year, event, conference, level, level_input):
     """
     Creates the URL for speechwire
 
     Args:
         event: String that has the name of the event
         conference: 1-6 for 1A-6A
-        district_number: 0 if not district
-        region_number: 0 if not region
-        state_number: 0 if not state; 1 otherwise
+        district_number: "" if not district
+        region_number: "" if not region
+        state_number: "0" if not state; "1" otherwise
         year: 2023, 2024, or 2025
 
     Returns: 
         String: The full url for the speechwire page
     """
+
     def event_code(e):
         match e:
             case "Journalism team results": 
@@ -72,6 +73,7 @@ def get_speechwire_url(event, conference, district_number, region_number, state_
                 return 22
             case _: 
                 raise ValueError(f"Unknown event name: {event}")
+            
     def year_code(y):
         match y:
             case 2025: 
@@ -86,28 +88,26 @@ def get_speechwire_url(event, conference, district_number, region_number, state_
     base = "https://postings.speechwire.com/r-uil-academics.php?Submit=View+postings"
     e_code = event_code(event)
     y_code = year_code(year)
-    if district_number == 0:
-        district_number = ""
-    if region_number == 0:
-        region_number = ""
-    if state_number == 0:
-        state_number = ""
 
+    district_number = level_input if level == "district" else ""
+    region_number = level_input if level == "region" else ""
+    state_number = level_input if level == "state" else ""
     return base + "&groupingid=" + str(e_code) + "&seasonid=" + str(y_code) + "&conference=" + str(conference) + "&district=" + str(district_number) + "&region=" + str(region_number) + "&state=" + str(state_number)
 
 # URL and headers
 try:
-    event = sys.argv[1]
-    conference = sys.argv[2]
-    district_number = sys.argv[3]
-    region_number = sys.argv[4]
-    state_number = sys.argv[5]
-    year = sys.argv[6]
+    year = sys.argv[1]
+    event = sys.argv[2]
+    conference = sys.argv[3]
+    level = sys.argv[4]
+    level_input = sys.argv[5]
+    
 except IndexError:
     print("IndexError: no parameters given in the command line for the type of competition")
     raise
 
-url = get_speechwire_url(event, int(conference), int(district_number), int(region_number), int(state_number), int(year))
+url = get_speechwire_url(year, event, conference, level, level_input)
+print("Scraping from URL: " + url)
 
 headers = {
     "User-Agent": "Mozilla/5.0"
