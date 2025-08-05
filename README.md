@@ -1,4 +1,4 @@
-# UIL Enhanced Archives
+# UIL Analyzer
 A searchable archive of past UIL competition results
 
 ## Features
@@ -35,10 +35,6 @@ A searchable archive of past UIL competition results
     - Technology: SQLite
     - Role: Primary data source, storing all UIL competition results to be queried by API
 
-## To Do
-  - Implement a Web Scraper to get past contest results from existing archives with Python (?)
-  - Implement filters and sorters for each section with JavaScript or React (?)
-  - Add CSS for each page
-
-## Project Link
+## Project Links
   - **Live Website**: https://uil-enhanced-archives.netlify.app/
+  - **Project Roadmap**: https://miro.com/app/board/uXjVJXft0ME=/?share_link_id=984844134323
