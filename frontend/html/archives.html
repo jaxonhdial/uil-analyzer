@@ -9,7 +9,7 @@
     <h1 class="title">Archives</h1>
     <p><a href="../index.html">Return to home page</a></p>
 
-    <form id="scrape-form">
+    <form id="scrapeForm">
         <div class="form-group">
             <label for="year">Choose a year:</label>
             <select name="year" id="year">
@@ -51,12 +51,12 @@
 
         <fieldset id="conference-fieldset">
             <legend>Conference</legend>
-            <label><input type="radio" name="conference" value="1A">1A</label>
-            <label><input type="radio" name="conference" value="2A">2A</label>
-            <label><input type="radio" name="conference" value="3A">3A</label>
-            <label><input type="radio" name="conference" value="4A">4A</label>
-            <label><input type="radio" name="conference" value="5A">5A</label>
-            <label><input type="radio" name="conference" value="6A">6A</label>
+            <label><input type="radio" name="conference" value="1">1A</label>
+            <label><input type="radio" name="conference" value="2">2A</label>
+            <label><input type="radio" name="conference" value="3">3A</label>
+            <label><input type="radio" name="conference" value="4">4A</label>
+            <label><input type="radio" name="conference" value="5">5A</label>
+            <label><input type="radio" name="conference" value="6">6A</label>
         </fieldset>
         
         <fieldset id="level-fieldset">
@@ -90,11 +90,15 @@
         </fieldset>
 
         <div class="actions">
-            <button type="button" id="show-table-btn">Search</button>
-            <button type="submit" id="download-btn">Export as CSV</button>
+            <!--Exports the table as a csv and shows the table on the screen-->
+            <button type="submit" id="showTableBtn">Search</button>
         </div>
+        
     </form>
 
-    <script src="../scripts/archives.js"></script>
+    <div id="individualTableContainer"></div>
+    <div id="teamTableContainer"></div>
+
+    <script src="../js/archives.js"></script>
 </body>
 </html>
