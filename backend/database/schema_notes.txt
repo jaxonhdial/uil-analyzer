@@ -1,0 +1,149 @@
+Individual Results:
+Accounting: 
+Place	School	Name	Code	Score	Points	Advance?
+
+Calculator Applications:
+Place	School	Name	Code	Score	Tiebreaker	Points	Advance?
+
+Computer Science:
+Place	School	Name	Code	Score	Tiebreaker (Accuracy)	Points	Advancce?
+
+Congress:
+Place	School	Name	Code (Doesn't exist on Speechwire, but needs to)	Advance?
+
+Copy Editing:
+Place	School	Name	Code	Points	Advance?
+
+Cross-Examination Debate:
+Place	School	2 Names	Code	Points	Advance?
+
+Current Events:
+Place	School	Name	Code	Objective	Essay	Score	Tiebreaker (Essay Score)	Advance?
+
+Editorial:
+Place	School	Name	Code	Points	Advance?
+
+Feature Writing:
+Place	School	Name	Code	Points	Advance?
+
+Headline Writing:
+Place	School	Name	Code	Points	Advance?
+
+Informative Speaking:
+Place	School	Name	Code	Points	Advance?
+
+Lincoln Douglas Debate:
+Place	School	Name	Code	Points	Advance?
+
+Literary Criticism:
+Place	School	Name	Code	Objective	Essay	Score	Tiebreaker (Essay Rank where number 1 wins the tiebreaker)	Points	Advance?
+
+Mathematics:
+Place	School	Name	Code	Score	Tiebreaker (Accuracy)	Points	Advance?
+
+News Writing:
+Place	School	Name	Code	Points	Advance?
+
+Number Sense:
+Place	School	Name	Code	Score	Points	Advance?
+
+Persuasive Speaking:
+Place	School	Name	Code	Points	Advance?
+
+Poetry Interpretation:
+Place	School	Name	Code	Points	Advance?
+
+Prose Interpretation:
+Place	School	Name	Code	Points	Advance?
+
+Ready Writing:
+Place	School	Name	Code	Points	Advance?
+
+Science:
+Place	School	Name	Code	Biology	Chemistry	Physics	Score	Tiebreaker (Accuracy)	Points	Advance?
+
+Social Studies:
+Place	School	Name	Code	Objective	Essay	Score	Tiebreaker (Essay Score)	Points	Advance?
+
+Spelling:
+Place	School	Name	Code	Score	Tiebreaker	Points	Advance?
+
+
+Team Results:
+Accounting:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Calculator Applications:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Computer Science:
+Place	School	Name1	Name2	Name3	Name4	Programming	Score	Points	Advance?
+
+Congress:
+No Team Results
+
+Copy Editing:
+No Team Results
+
+Cross-Examination Debate:
+No Team Results
+
+Current Events:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Editorial:
+No Team Results
+
+Feature Writing:
+No Team Results
+
+Headline Writing:
+No Team Results
+
+Informative Speaking:
+No Team Results
+
+Lincoln Douglas Debate:
+No Team Results
+
+Literary Criticism:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Mathematics:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+News Writing:
+No Team Results
+
+Number Sense:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Persuasive Speaking:
+No Team Results
+
+Poetry Interpretation:
+No Team Results
+
+Prose Interpretation:
+No Team Results
+
+Ready Writing:
+No Team Results
+
+Science:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Social Studies:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+Spelling:
+Place	School	Name1	Name2	Name3	Name4	Score	Points	Advance?
+
+
+Science also has top Biology, Chemistry, and Physics Scores:
+Biology Top Scorers:
+Name 	School	Score	Points	Advance?
+Chemistry Top Scorers:
+Name 	School	Score	Points	Advance?
+Physics Top Scorers:
+Name 	School	Score	Points	Advance?
