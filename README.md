@@ -1,5 +1,5 @@
 # UIL Analyzer
-A searchable archive of past UIL competition results
+A searchable and filterable archive that makes past UIL competition results more accessible and easier to explore.
 
 ## Features
   - **Archives**:
@@ -28,13 +28,16 @@ A searchable archive of past UIL competition results
     - Technologies: Python, Flask
     - Role: Takes frontend parameters, queries the database, and returns a JSON for the table of results
     - Hosting: Render
-  - **Backend Web Scraping**:
-    - Technologies: Python Scripts
-    - Role: Retrieves raw results from official UIL archives and adds to the database
+  - **Backend Query**:
+    - Technologies: Python, Pandas
+    - Role: Queries results from Database and converts to DataFrames
+  - **Backend Populate**:
+    - Technologies: Python, Pandas, BeautifulSoup
+    - Role: Scrapes official UIL Archives to populate the local SQLite Database
   - **Database**:
     - Technology: SQLite
-    - Role: Primary data source, storing all UIL competition results to be queried by API
+    - Role: Primary data source, storing all UIL competition results
 
 ## Project Links
-  - **Live Website**: https://uil-enhanced-archives.netlify.app/
+  - **Live Website**: https://uil-analyzer.netlify.app/
   - **Project Roadmap**: https://miro.com/app/board/uXjVJXft0ME=/?share_link_id=984844134323
