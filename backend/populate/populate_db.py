@@ -1,23 +1,18 @@
 import sqlite3
+import pandas as pd
 
-# Connect to SQLite DB
-conn = sqlite3.connect("uil_archives.db")
+# Connects to Database
+conn = sqlite3.connect("testing/test.db")
 cursor = conn.cursor()
 
-# -------------------------
-# Caches for lookup tables
-# -------------------------
+# Caches for Lookup Tables
 school_cache = {}
 event_cache = {}
 level_cache = {}
 status_cache = {}
 
-# -------------------------
-# Lookup + Insert Helpers
-# -------------------------
-
+# Generic Helper: Get or Create ID with Cache
 def get_or_create_id(table, name, cache):
-    """Lookup or insert and cache a name in a lookup table."""
     if name in cache:
         return cache[name]
     cursor.execute(f"SELECT id FROM {table} WHERE name = ?", (name,))
@@ -30,27 +25,37 @@ def get_or_create_id(table, name, cache):
         cache[name] = cursor.lastrowid
     return cache[name]
 
-def get_or_create_school_id(name):
-    return get_or_create_id("schools", name, school_cache)
+# --- Insert School ---
+def get_or_create_school_id(school_name):
+    return get_or_create_id("schools", school_name, school_cache)
 
-def get_or_create_event_id(name):
-    return get_or_create_id("events", name, event_cache)
+# --- Insert Event ---
+def get_or_create_event_id(event_name):
+    return get_or_create_id("events", event_name, event_cache)
 
-def get_or_create_level_id(name):
-    return get_or_create_id("levels", name, level_cache)
+# --- Insert Level ---
+def get_or_create_level_id(level_name):
+    return get_or_create_id("levels", level_name, level_cache)
 
-def get_or_create_status_id(name):
-    return get_or_create_id("advancement_status", name, status_cache)
+# --- Insert Advancement Status ---
+def get_or_create_status_id(status_name):
+    return get_or_create_id("advancement_status", status_name, status_cache)
 
-def get_or_create_student_id(name, school_id):
-    cursor.execute("SELECT id FROM students WHERE name = ? AND school_id = ?", (name, school_id))
+# --- Insert Student ---
+def get_or_create_student_id(student_name, school_id):
+    cursor.execute("""
+        SELECT id FROM students WHERE name = ? AND school_id = ?
+    """, (student_name, school_id))
     row = cursor.fetchone()
     if row:
         return row[0]
-    cursor.execute("INSERT INTO students (name, school_id) VALUES (?, ?)", (name, school_id))
+    cursor.execute("""
+        INSERT INTO students (name, school_id) VALUES (?, ?)
+    """, (student_name, school_id))
     conn.commit()
     return cursor.lastrowid
 
+# --- Insert Contest ---
 def get_or_create_contest_id(year, level_id, level_input, conference, event_id):
     cursor.execute("""
         SELECT id FROM contests
@@ -66,15 +71,12 @@ def get_or_create_contest_id(year, level_id, level_input, conference, event_id):
     conn.commit()
     return cursor.lastrowid
 
-# -------------------------
-# Insert Individual Results
-# -------------------------
-
+# --- Insert Individual Results from DataFrame ---
 def insert_individual_results(df):
     conn.execute("BEGIN")
     try:
         for _, row in df.iterrows():
-            # Get lookup table values
+            # Lookup or insert all related IDs
             school_id = get_or_create_school_id(row['school_name'])
             student_id = get_or_create_student_id(row['student_name'], school_id)
             event_id = get_or_create_event_id(row['event_name'])
@@ -87,23 +89,15 @@ def insert_individual_results(df):
             # Insert into individual_results
             cursor.execute("""
                 INSERT INTO individual_results (
-                    contest_id, student_id, code, placement, score, tiebreaker,
-                    objective_score, essay_score, biology_score, chemistry_score,
-                    physics_score, points, advancement_status_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    contest_id, student_id, code, placement, score, points, advancement_status_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (
                 contest_id,
                 student_id,
-                row.get('code'),
-                row.get('placement'),
-                row.get('score'),
-                row.get('tiebreaker'),
-                row.get('objective_score'),
-                row.get('essay_score'),
-                row.get('biology_score'),
-                row.get('chemistry_score'),
-                row.get('physics_score'),
-                row.get('points'),
+                row['code'],
+                row['placement'],
+                row['score'],
+                row['points'],
                 adv_status_id
             ))
         conn.commit()
@@ -112,15 +106,12 @@ def insert_individual_results(df):
         print("Error inserting individual results:", e)
         raise
 
-# -------------------------
-# Insert Team Results (Optional)
-# -------------------------
-
+# --- Insert Team Results from DataFrame
 def insert_team_results(df):
     conn.execute("BEGIN")
     try:
         for _, row in df.iterrows():
-            # School + contest
+            # Get or create lookup IDs
             school_id = get_or_create_school_id(row['school_name'])
             event_id = get_or_create_event_id(row['event_name'])
             level_id = get_or_create_level_id(row['level_name'])
@@ -129,23 +120,31 @@ def insert_team_results(df):
                 row['year'], level_id, row['level_input'], row['conference'], event_id
             )
 
-            # Student IDs (may be None)
+            # Resolve up to 4 team members student IDs, handle missing names gracefully
             student_ids = []
             for i in range(1, 5):
-                name_key = f"student_{i}_name"
-                if pd.notna(row.get(name_key)):
-                    student_ids.append(
-                        get_or_create_student_id(row[name_key], school_id)
-                    )
+                student_key = f'student_{i}_name'
+                student_name = row.get(student_key)
+                if student_name and pd.notna(student_name):
+                    student_id = get_or_create_student_id(student_name, school_id)
+                    student_ids.append(student_id)
                 else:
                     student_ids.append(None)
 
             # Insert into team_results
             cursor.execute("""
                 INSERT INTO team_results (
-                    contest_id, school_id, placement,
-                    student_1_id, student_2_id, student_3_id, student_4_id,
-                    score, programming_score, points, advancement_status_id
+                    contest_id,
+                    school_id,
+                    placement,
+                    student_1_id,
+                    student_2_id,
+                    student_3_id,
+                    student_4_id,
+                    score,
+                    programming_score,
+                    points,
+                    advancement_status_id
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 contest_id,
@@ -166,9 +165,6 @@ def insert_team_results(df):
         print("Error inserting team results:", e)
         raise
 
-# -------------------------
-# Cleanup
-# -------------------------
-
+# --- Close the connection when done (optional, can be left to caller) ---
 def close_connection():
     conn.close()
