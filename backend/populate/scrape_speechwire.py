@@ -1,187 +1,195 @@
-import sys
+import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-def scrape_individual_speechwire(year, event, conference, level, level_input):
-    print(f"Speechwire Individual Results will be scraped! Year: {year}; Event: {event}; Conference: {conference}; Level: {level}; Level_input: {level_input}")
+def event_code(event):
+    """Map event name to SpeechWire event code."""
+    mapping = {
+        # TODO: Add back in team results
+        # "Journalism team results": -3,
+        # "Speech team results": -2,
+        # "Overall school sweepstakes": -1,
+        "Accounting": 1,
+        "Computer Applications": 2,
+        "Current Issues and Events": 3,
+        "Literary Criticism": 4,
+        "Ready Writing": 5,
+        "Social Studies": 6,
+        "Spelling": 7,
+        "Calculator Applications": 8,
+        "Computer Science": 9,
+        "Mathematics": 10,
+        "Number Sense": 11,
+        "Science": 12,
+        "Copy Editing": 13,
+        "Editorial": 14,
+        "Feature Writing": 15,
+        "Headline Writing": 16,
+        "News Writing": 17,
+        "Informative Speaking": 18,
+        "Persuasive Speaking": 19,
+        "Lincoln Douglas Debate": 20,
+        "Poetry Interpretation": 21,
+        "Prose Interpretation": 22,
+    }
+    if event not in mapping:
+        raise ValueError(f"Unknown event name: {event}")
+    return mapping[event]
 
-def scrape_team_speechwire(year, event, conference, level, level_input):
-    print(f"Speechwire Team Results will be scraped! Year: {year}; Event: {event}; Conference: {conference}; Level: {level}; Level_input: {level_input}")
+def year_code(year):
+    mapping = {2025: 17, 2024: 16, 2023: 15}
+    if year not in mapping:
+        raise ValueError(f"Unsupported year: {year}")
+    return mapping[year]
 
-# def get_speechwire_url(year, event, conference, level, level_input):
-#     """
-#     Creates the URL for speechwire
+def build_url(year, event, conference, level, level_input):
+    base = "https://postings.speechwire.com/r-uil-academics.php?Submit=View+postings"
+    e_code = event_code(event)
+    y_code = year_code(year)
 
-#     Args:
-#         event: String that has the name of the event
-#         conference: 1-6 for 1A-6A
-#         district_number: "" if not district
-#         region_number: "" if not region
-#         state_number: "0" if not state; "1" otherwise
-#         year: 2023, 2024, or 2025
+    district_number = level_input if level == "district" else ""
+    region_number = level_input if level == "region" else ""
+    state_number = "1" if level == "state" else ""
 
-#     Returns: 
-#         String: The full url for the speechwire page
-#     """
+    url = (
+        f"{base}&groupingid={e_code}&seasonid={y_code}&conference={conference}"
+        f"&district={district_number}&region={region_number}&state={state_number}"
+    )
+    return url
 
-#     def event_code(e):
-#         match e:
-#             case "Journalism team results": 
-#                 return -3
-#             case "Speech team results": 
-#                 return -2
-#             case "Overall school sweepstakes": 
-#                 return -1
-#             case "Accounting": 
-#                 return 1
-#             case "Computer Applications": 
-#                 return 2
-#             case "Current Issues and Events": 
-#                 return 3
-#             case "Literary Criticism": 
-#                 return 4
-#             case "Ready Writing": 
-#                 return 5
-#             case "Social Studies": 
-#                 return 6
-#             case "Spelling": 
-#                 return 7
-#             case "Calculator Applications": 
-#                 return 8
-#             case "Computer Science": 
-#                 return 9
-#             case "Mathematics": 
-#                 return 10
-#             case "Number Sense": 
-#                 return 11
-#             case "Science": 
-#                 return 12
-#             case "Copy Editing": 
-#                 return 13
-#             case "Editorial": 
-#                 return 14
-#             case "Feature Writing": 
-#                 return 15
-#             case "Headline Writing": 
-#                 return 16
-#             case "News Writing": 
-#                 return 17
-#             case "Informative Speaking": 
-#                 return 18
-#             case "Persuasive Speaking": 
-#                 return 19
-#             case "Lincoln Douglas Debate": 
-#                 return 20
-#             case "Poetry Interpretation": 
-#                 return 21
-#             case "Prose Interpretation": 
-#                 return 22
-#             case _: 
-#                 raise ValueError(f"Unknown event name: {event}")
-            
-#     def year_code(y):
-#         match y:
-#             case 2025: 
-#                 return 17
-#             case 2024:
-#                 return 16
-#             case 2023:
-#                 return 15
-#             case _: 
-#                 raise ValueError(f"Unsupported year: {y}")
+def scrape_individual_table(soup):
+    tables = soup.find_all("table")
+    if len(tables) < 6:
+        return pd.DataFrame()
+    individual_table = tables[5]
+    rows = individual_table.find_all("tr")
+    headers = [td.get_text(strip=True) for td in rows[0].find_all("td")]
+    data = []
+    for row in rows[1:]:
+        cols = row.find_all("td")
+        data.append([col.get_text(strip=True) for col in cols])
+    df = pd.DataFrame(data, columns=headers)
+    return df
 
-#     base = "https://postings.speechwire.com/r-uil-academics.php?Submit=View+postings"
-#     e_code = event_code(event)
-#     y_code = year_code(year)
+def scrape_team_table(soup):
+    tables = soup.find_all("table")
+    if len(tables) < 7:
+        return pd.DataFrame()
+    team_table = tables[6]
+    rows = team_table.find_all("tr")
 
-#     district_number = level_input if level == "district" else ""
-#     region_number = level_input if level == "region" else ""
-#     state_number = level_input if level == "state" else ""
-#     return base + "&groupingid=" + str(e_code) + "&seasonid=" + str(y_code) + "&conference=" + str(conference) + "&district=" + str(district_number) + "&region=" + str(region_number) + "&state=" + str(state_number)
+    orig_headers = [td.get_text(strip=True) for td in rows[0].find_all("td")]
 
-# # URL and headers
-# try:
-#     year = sys.argv[1]
-#     event = sys.argv[2]
-#     conference = sys.argv[3]
-#     level = sys.argv[4]
-#     level_input = sys.argv[5]
-    
-# except IndexError:
-#     print("IndexError: no parameters given in the command line for the type of competition")
-#     raise
+    new_headers = []
+    for h in orig_headers:
+        new_headers.append(h)
+        if h == "School":
+            new_headers.extend(["student_1_name", "student_2_name", "student_3_name", "student_4_name"])
 
-# url = get_speechwire_url(year, event, conference, level, level_input)
-# print("Scraping from URL: " + url)
+    data = []
+    for row in rows[1:]:
+        cols = row.find_all("td")
+        school_html = cols[1].decode_contents()
+        school_soup = BeautifulSoup(school_html, "html.parser")
+        members = list(school_soup.stripped_strings)
+        members = members[:5] + [''] * (5 - len(members))  # school + 4 members
 
-# headers = {
-#     "User-Agent": "Mozilla/5.0"
-# }
+        row_data = [cols[0].get_text(strip=True)] + members + [col.get_text(strip=True) for col in cols[2:]]
+        data.append(row_data)
 
-# # Fetch the page
-# response = requests.get(url, headers=headers)
-# soup = BeautifulSoup(response.text, "lxml")
+    df = pd.DataFrame(data, columns=new_headers)
+    return df
 
-# # Find all tables
-# tables = soup.find_all("table")
+def normalize_individual_df(df, year, event_name, conference, level_name, level_input):
+    if df.empty:
+        return df
+    col_map = {
+        'Entry': 'student_name',
+        'School': 'school_name',
+        'Code': 'code',
+        'Place': 'placement',
+        'TotalScore': 'score',
+        'Written': 'score',     # Used For Computer Science
+        'AccuracyScore': 'tiebreaker',
+        'Objective': 'objective_score',
+        'Essay': 'essay_score',
+        'ScoresTotaled': 'score',    # Used for Current Events and Social Studies
+        'Biology': 'biology_score',
+        'Chemistry': 'chemistry_score',
+        'Physics': 'physics_score',
+        'Points': 'points',
+        'Advance?': 'advancement_status'
+    }
+    existing_renames = {k: v for k, v in col_map.items() if k in df.columns}
+    df = df.rename(columns=existing_renames)
 
-# # Creating Individual Table
-# individual_table_data = []
-# individual_table = tables[5]
-# individual_table_rows = individual_table.find_all("tr")
-# individual_table_headers = [header.get_text(strip=True) for header in individual_table_rows[0].find_all('td')]
+    for col in col_map.values():
+        if col not in df.columns:
+            df[col] = None
 
-# for row in individual_table_rows[1:]:  # Skip the header row
-#     columns = row.find_all('td')
-#     individual_table_data.append([col.get_text(strip=True) for col in columns])
+    df['event_name'] = event_name
+    df['year'] = year
+    df['conference'] = conference
+    df['level_name'] = level_name
+    df['level_input'] = level_input
 
-# # Creating Team Table
-# team_table_data = []
-# team_table = tables[6]
-# team_table_rows = team_table.find_all("tr")
-# team_table_headers = [header.get_text(strip=True) for header in team_table_rows[0].find_all('td')]
+    for col in ['student_name', 'school_name', 'advancement_status']:
+        if col in df.columns:
+            df[col] = df[col].astype(str).str.strip()
 
-# for row in team_table_rows[1:]:  # Skip the header row
-#     columns = row.find_all('td')
+    return df
 
-#     # Split the 'School' column (columns[1]) by <br> tag
-#     school_column = columns[1]
+def normalize_team_df(df, year, event_name, conference, level_name, level_input):
+    if df.empty:
+        return df
+    col_map = {
+        'Place': 'placement',
+        'Total': 'score',
+        'Programming': 'programming_score',
+        'Points': 'points',
+        'Advance?': 'advancement_status',
+        'School': 'school_name',
+    }
+    existing_renames = {k: v for k, v in col_map.items() if k in df.columns}
+    df = df.rename(columns=existing_renames)
 
-#     # Parse the inner HTML of the school cell
-#     school_soup = BeautifulSoup(school_column.decode_contents(), 'html.parser')
+    for col in ['placement', 'score', 'programming_score', 'points', 'advancement_status', 'school_name']:
+        if col not in df.columns:
+            df[col] = None
 
-#     # Split into parts using .stripped_strings to handle both the text and <br> nicely
-#     school_parts = list(school_soup.stripped_strings)
+    df['event_name'] = event_name
+    df['year'] = year
+    df['conference'] = conference
+    df['level_name'] = level_name
+    df['level_input'] = level_input
 
-#     # Ensure exactly 5 parts: 1 school + 4 students
-#     school_parts = school_parts[:5] + [''] * (5 - len(school_parts))
+    for col in ['advancement_status', 'school_name']:
+        if col in df.columns:
+            df[col] = df[col].astype(str).str.strip()
 
-#     # Combine with other columns
-#     row_data = [columns[0].get_text(strip=True)] + school_parts + [col.get_text(strip=True) for col in columns[2:]]
+    for i in range(1, 5):
+        col = f'student_{i}_name'
+        if col not in df.columns:
+            df[col] = None
 
-#     # Add to list
-#     team_table_data.append(row_data)
+    return df
 
-# # Creates new team table headers to include members of the team
-# new_team_table_headers = []
-# for header in team_table_headers:
-#     new_team_table_headers.append(header)
-#     if header == "School":
-#         new_team_table_headers.extend(["Entry 1", "Entry 2", "Entry 3", "Entry 4"])
+def scrape_speechwire(year, event, conference, level, level_input):
+    url = build_url(year, event, conference, level, level_input)
+    print(f"Fetching URL: {url}")
+    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+    soup = BeautifulSoup(response.text, "lxml")
 
-# # Create Data Frames for both tables
-# df_individual_table = pd.DataFrame(individual_table_data, columns=individual_table_headers)
-# df_team_table = pd.DataFrame(team_table_data, columns=new_team_table_headers)
+    raw_individual_df = scrape_individual_table(soup)
+    raw_team_df = scrape_team_table(soup)
 
-# # Save tables as CSV Files
-# df_individual_table.to_csv("data/individual_results.csv", index=False)
-# print("CSV saved: data/individual_results.csv")
+    individual_df = normalize_individual_df(raw_individual_df, year, event, conference, level, level_input)
+    team_df = normalize_team_df(raw_team_df, year, event, conference, level, level_input)
 
-# df_team_table.to_csv("data/team_results.csv", index=False)
-# print("CSV saved: data/team_results.csv")
+    # Debug prints — remove or comment out later
+    print("Individual Results Columns:", individual_df.columns)
+    print(individual_df.head())
+    print("Team Results Columns:", team_df.columns)
+    print(team_df.head())
 
-
-# print("Individual Table:")
-# print(df_individual_table)
-# print("\nTeam Table:")
-# print(df_team_table)
+    return individual_df, team_df

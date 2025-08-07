@@ -1,26 +1,17 @@
 import argparse
-import pandas as pd
-
 from backend.populate.scrape_uil_archives import (
     scrape_individual_uil_archives,
     scrape_team_uil_archives,
 )
-from backend.populate.scrape_speechwire import (
-    scrape_individual_speechwire,
-    scrape_team_speechwire,
-)
-from backend.populate.populate_db import (
-    insert_individual_results,
-    insert_team_results,
-)
+from backend.populate.scrape_speechwire import scrape_speechwire
+from backend.populate.populate_db import insert_individual_results, insert_team_results
 
-# Year ranges
 VALID_YEARS = list(range(2015, 2026))
 UIL_ARCHIVE_YEARS = list(range(2015, 2023))
 SPEECHWIRE_YEARS = list(range(2023, 2026))
 
 DEFAULT_EVENTS = [
-    "Journalism team results", "Speech team results", "Overall school sweepstakes",
+    """ "Journalism team results", "Speech team results", "Overall school sweepstakes", """     # TODO: Add back in team results.
     "Accounting", "Computer Applications", "Current Issues and Events", "Literary Criticism",
     "Ready Writing", "Social Studies", "Spelling", "Calculator Applications", "Computer Science",
     "Mathematics", "Number Sense", "Science", "Copy Editing", "Editorial", "Feature Writing",
@@ -31,26 +22,23 @@ DEFAULT_EVENTS = [
 DEFAULT_CONFERENCES = ['1', '2', '3', '4', '5', '6']
 DEFAULT_LEVELS = ['district', 'region', 'state']
 
-# Valid level inputs as strings, matching what your scrapers expect in URLs
 VALID_LEVEL_INPUTS = {
     'district': [str(i) for i in range(1, 33)],
     'region': [str(i) for i in range(1, 5)],
-    'state': ['1'],  # use '1' for state level (or adapt if you prefer)
+    'state': ['1'],
 }
 
 def expand_param(param, valid_values):
     return valid_values if param == 'all' else [param]
 
-def scrape_and_insert(year, event, conference_num, level, level_input):
-    # conference_num passed as-is (e.g., '5'), no 'A' appended
-    print(f"\n🔎 Scraping: year={year} event={event} conference={conference_num} level={level} level_input={level_input}")
+def scrape_and_insert(year, event, conference, level, level_input):
+    print(f"\n🔎 Scraping: year={year} event={event} conference={conference} level={level} level_input={level_input}")
 
     if year in UIL_ARCHIVE_YEARS:
-        indiv_df = scrape_individual_uil_archives(year, event, conference_num, level, level_input)
-        team_df = scrape_team_uil_archives(year, event, conference_num, level, level_input)
+        indiv_df = scrape_individual_uil_archives(year, event, conference, level, level_input)
+        team_df = scrape_team_uil_archives(year, event, conference, level, level_input)
     elif year in SPEECHWIRE_YEARS:
-        indiv_df = scrape_individual_speechwire(year, event, conference_num, level, level_input)
-        team_df = scrape_team_speechwire(year, event, conference_num, level, level_input)
+        indiv_df, team_df = scrape_speechwire(year, event, conference, level, level_input)
     else:
         print(f"❌ Unsupported year: {year}")
         return
@@ -58,13 +46,14 @@ def scrape_and_insert(year, event, conference_num, level, level_input):
     if indiv_df is not None and not indiv_df.empty:
         insert_individual_results(indiv_df)
         print(f"✅ Inserted {len(indiv_df)} individual rows")
+    else:
+        print("ℹ️ No individual results found")
 
     if team_df is not None and not team_df.empty:
         insert_team_results(team_df)
         print(f"✅ Inserted {len(team_df)} team rows")
-
-    if (indiv_df is None or indiv_df.empty) and (team_df is None or team_df.empty):
-        print("⚠️ No data returned")
+    else:
+        print("ℹ️ No team results found")
 
 def main():
     parser = argparse.ArgumentParser(description="UIL Archives Scraper")
@@ -86,12 +75,10 @@ def main():
         for year in years:
             for conference in conferences:
                 for level in levels:
-                    # Skip 2020 for region or state level
-                    if year == 2020 and (level == "region" or level == "state"):
+                    if year == 2020 and level in ("region", "state"):
                         print(f"⏭️ Skipping {level} {year} due to no competition")
                         continue
 
-                    # Expand level_input 'all' to all valid inputs for that level
                     if args.level_input == 'all':
                         level_inputs = VALID_LEVEL_INPUTS.get(level, ['1'])
                     else:

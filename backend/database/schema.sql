@@ -1,174 +1,117 @@
-import sqlite3
+-- ============================
+-- UIL Archives Database Schema
+-- ============================
 
-# Connect to SQLite DB
-conn = sqlite3.connect("uil_archives.db")
-cursor = conn.cursor()
+-- Drop existing tables if they exist (only run this if you want to recreate)
+-- DROP TABLE IF EXISTS individual_results;
+-- DROP TABLE IF EXISTS team_results;
+-- DROP TABLE IF EXISTS contests;
+-- DROP TABLE IF EXISTS students;
+-- DROP TABLE IF EXISTS schools;
+-- DROP TABLE IF EXISTS events;
+-- DROP TABLE IF EXISTS levels;
+-- DROP TABLE IF EXISTS advancement_status;
 
-# -------------------------
-# Caches for lookup tables
-# -------------------------
-school_cache = {}
-event_cache = {}
-level_cache = {}
-status_cache = {}
+-- ============================
+-- Lookup Tables
+-- ============================
 
-# -------------------------
-# Lookup + Insert Helpers
-# -------------------------
+CREATE TABLE IF NOT EXISTS events (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+);
 
-def get_or_create_id(table, name, cache):
-    """Lookup or insert and cache a name in a lookup table."""
-    if name in cache:
-        return cache[name]
-    cursor.execute(f"SELECT id FROM {table} WHERE name = ?", (name,))
-    row = cursor.fetchone()
-    if row:
-        cache[name] = row[0]
-    else:
-        cursor.execute(f"INSERT INTO {table} (name) VALUES (?)", (name,))
-        conn.commit()
-        cache[name] = cursor.lastrowid
-    return cache[name]
+CREATE TABLE IF NOT EXISTS advancement_status (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+);
 
-def get_or_create_school_id(name):
-    return get_or_create_id("schools", name, school_cache)
+CREATE TABLE IF NOT EXISTS levels (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+);
 
-def get_or_create_event_id(name):
-    return get_or_create_id("events", name, event_cache)
+CREATE TABLE IF NOT EXISTS schools (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE
+);
 
-def get_or_create_level_id(name):
-    return get_or_create_id("levels", name, level_cache)
+-- ============================
+-- Main Data Tables
+-- ============================
 
-def get_or_create_status_id(name):
-    return get_or_create_id("advancement_status", name, status_cache)
+CREATE TABLE IF NOT EXISTS students (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    school_id INTEGER NOT NULL,
+    FOREIGN KEY (school_id) REFERENCES schools(id),
+    UNIQUE(name, school_id)
+);
 
-def get_or_create_student_id(name, school_id):
-    cursor.execute("SELECT id FROM students WHERE name = ? AND school_id = ?", (name, school_id))
-    row = cursor.fetchone()
-    if row:
-        return row[0]
-    cursor.execute("INSERT INTO students (name, school_id) VALUES (?, ?)", (name, school_id))
-    conn.commit()
-    return cursor.lastrowid
+CREATE TABLE IF NOT EXISTS contests (
+    id INTEGER PRIMARY KEY,
+    year INTEGER NOT NULL,
+    level_id INTEGER NOT NULL,
+    level_input INTEGER,  -- district/region number, NULL for state
+    conference INTEGER NOT NULL,  -- 1-6 for 1A-6A
+    event_id INTEGER NOT NULL,
+    FOREIGN KEY (level_id) REFERENCES levels(id),
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    UNIQUE(year, level_id, level_input, conference, event_id)
+);
 
-def get_or_create_contest_id(year, level_id, level_input, conference, event_id):
-    cursor.execute("""
-        SELECT id FROM contests
-        WHERE year = ? AND level_id = ? AND level_input = ? AND conference = ? AND event_id = ?
-    """, (year, level_id, level_input, conference, event_id))
-    row = cursor.fetchone()
-    if row:
-        return row[0]
-    cursor.execute("""
-        INSERT INTO contests (year, level_id, level_input, conference, event_id)
-        VALUES (?, ?, ?, ?, ?)
-    """, (year, level_id, level_input, conference, event_id))
-    conn.commit()
-    return cursor.lastrowid
+CREATE TABLE IF NOT EXISTS individual_results (
+    id INTEGER PRIMARY KEY,
+    contest_id INTEGER NOT NULL,
+    student_id INTEGER NOT NULL,
+    code TEXT,  -- competitor code/number
+    placement INTEGER,  -- Changed to INTEGER: 1, 2, 3, etc.
+    score INTEGER,  -- Changed to INTEGER
+    tiebreaker INTEGER,  -- Changed to INTEGER
+    objective_score INTEGER,  -- Changed to INTEGER
+    essay_score INTEGER,  -- Changed to INTEGER
+    biology_score INTEGER,  -- Changed to INTEGER
+    chemistry_score INTEGER,  -- Changed to INTEGER
+    physics_score INTEGER,  -- Changed to INTEGER
+    points INTEGER,  -- Changed to INTEGER
+    advancement_status_id INTEGER,
+    FOREIGN KEY (contest_id) REFERENCES contests(id),
+    FOREIGN KEY (student_id) REFERENCES students(id),
+    FOREIGN KEY (advancement_status_id) REFERENCES advancement_status(id)
+);
 
-# -------------------------
-# Insert Individual Results
-# -------------------------
+CREATE TABLE IF NOT EXISTS team_results (
+    id INTEGER PRIMARY KEY,
+    contest_id INTEGER NOT NULL,
+    school_id INTEGER NOT NULL,
+    placement INTEGER,  -- Changed to INTEGER: 1, 2, 3, etc.
+    student_1_id INTEGER,
+    student_2_id INTEGER,
+    student_3_id INTEGER,
+    student_4_id INTEGER,
+    score INTEGER,  -- Changed to INTEGER
+    programming_score INTEGER,  -- Changed to INTEGER (for Computer Science)
+    points INTEGER,  -- Changed to INTEGER
+    advancement_status_id INTEGER,
+    FOREIGN KEY (contest_id) REFERENCES contests(id),
+    FOREIGN KEY (school_id) REFERENCES schools(id),
+    FOREIGN KEY (student_1_id) REFERENCES students(id),
+    FOREIGN KEY (student_2_id) REFERENCES students(id),
+    FOREIGN KEY (student_3_id) REFERENCES students(id),
+    FOREIGN KEY (student_4_id) REFERENCES students(id),
+    FOREIGN KEY (advancement_status_id) REFERENCES advancement_status(id)
+);
 
-def insert_individual_results(df):
-    conn.execute("BEGIN")
-    try:
-        for _, row in df.iterrows():
-            # Get lookup table values
-            school_id = get_or_create_school_id(row['school_name'])
-            student_id = get_or_create_student_id(row['student_name'], school_id)
-            event_id = get_or_create_event_id(row['event_name'])
-            level_id = get_or_create_level_id(row['level_name'])
-            adv_status_id = get_or_create_status_id(row['advancement_status'])
-            contest_id = get_or_create_contest_id(
-                row['year'], level_id, row['level_input'], row['conference'], event_id
-            )
+-- ============================
+-- Indexes for Performance
+-- ============================
 
-            # Insert into individual_results
-            cursor.execute("""
-                INSERT INTO individual_results (
-                    contest_id, student_id, code, placement, score, tiebreaker,
-                    objective_score, essay_score, biology_score, chemistry_score,
-                    physics_score, points, advancement_status_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                contest_id,
-                student_id,
-                row.get('code'),
-                row.get('placement'),
-                row.get('score'),
-                row.get('tiebreaker'),
-                row.get('objective_score'),
-                row.get('essay_score'),
-                row.get('biology_score'),
-                row.get('chemistry_score'),
-                row.get('physics_score'),
-                row.get('points'),
-                adv_status_id
-            ))
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
-        print("Error inserting individual results:", e)
-        raise
-
-# -------------------------
-# Insert Team Results (Optional)
-# -------------------------
-
-def insert_team_results(df):
-    conn.execute("BEGIN")
-    try:
-        for _, row in df.iterrows():
-            # School + contest
-            school_id = get_or_create_school_id(row['school_name'])
-            event_id = get_or_create_event_id(row['event_name'])
-            level_id = get_or_create_level_id(row['level_name'])
-            adv_status_id = get_or_create_status_id(row['advancement_status'])
-            contest_id = get_or_create_contest_id(
-                row['year'], level_id, row['level_input'], row['conference'], event_id
-            )
-
-            # Student IDs (may be None)
-            student_ids = []
-            for i in range(1, 5):
-                name_key = f"student_{i}_name"
-                if pd.notna(row.get(name_key)):
-                    student_ids.append(
-                        get_or_create_student_id(row[name_key], school_id)
-                    )
-                else:
-                    student_ids.append(None)
-
-            # Insert into team_results
-            cursor.execute("""
-                INSERT INTO team_results (
-                    contest_id, school_id, placement,
-                    student_1_id, student_2_id, student_3_id, student_4_id,
-                    score, programming_score, points, advancement_status_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                contest_id,
-                school_id,
-                row.get('placement'),
-                student_ids[0],
-                student_ids[1],
-                student_ids[2],
-                student_ids[3],
-                row.get('score'),
-                row.get('programming_score'),
-                row.get('points'),
-                adv_status_id
-            ))
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
-        print("Error inserting team results:", e)
-        raise
-
-# -------------------------
-# Cleanup
-# -------------------------
-
-def close_connection():
-    conn.close()
+CREATE INDEX IF NOT EXISTS idx_individual_results_contest ON individual_results(contest_id);
+CREATE INDEX IF NOT EXISTS idx_individual_results_student ON individual_results(student_id);
+CREATE INDEX IF NOT EXISTS idx_individual_results_placement ON individual_results(placement);
+CREATE INDEX IF NOT EXISTS idx_team_results_contest ON team_results(contest_id);
+CREATE INDEX IF NOT EXISTS idx_team_results_school ON team_results(school_id);
+CREATE INDEX IF NOT EXISTS idx_team_results_placement ON team_results(placement);
+CREATE INDEX IF NOT EXISTS idx_students_school ON students(school_id);
+CREATE INDEX IF NOT EXISTS idx_contests_year ON contests(year);
+CREATE INDEX IF NOT EXISTS idx_contests_event ON contests(event_id);
