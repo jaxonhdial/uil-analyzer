@@ -4,7 +4,6 @@ A searchable and filterable archive that makes past UIL competition results more
 ## Features
   - **Archives**:
     - Takes the benefits of the old archive system being all on one page and combines it with the recency of speechwire.
-    - Able to export as a csv file to import into spreadsheets.
   - **Virtual Contest**:
     - Able to combine multiple archives into one mega contest.
     - Able to add your own scores to add yourself to the past contest.

@@ -28,10 +28,10 @@ EVENTS = [
 ]
 
 def test_all_events():
-    year = 2025
-    conference = 5
-    level = "district"
-    level_input = 8
+    year = 2024
+    conference = 6
+    level = "region"
+    level_input = 3
     
     for event in EVENTS:
         print("=" * 50)

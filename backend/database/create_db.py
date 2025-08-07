@@ -1,7 +1,9 @@
 import sqlite3
 import os
 
-def create_database(db_path="backend/database/uil_archives.db"):
+from backend.constants.db_path import DB_PATH
+
+def create_database(db_path=DB_PATH):
     """
     Creates the UIL Archives database with proper schema and populates lookup tables.
     
@@ -90,8 +92,7 @@ def populate_lookup_tables(cursor):
     
     print("✅ Lookup tables populated")
 
-# def recreate_database(db_path="backend/database/uil_archives.db"):
-def recreate_database(db_path="testing/test.db"):
+def recreate_database(db_path=DB_PATH):
     """
     Completely recreate the database from scratch.
     WARNING: This will delete all existing data!

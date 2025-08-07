@@ -11,7 +11,7 @@ UIL_ARCHIVE_YEARS = list(range(2015, 2023))
 SPEECHWIRE_YEARS = list(range(2023, 2026))
 
 DEFAULT_EVENTS = [
-    """ "Journalism team results", "Speech team results", "Overall school sweepstakes", """     # TODO: Add back in team results.
+    # "Journalism team results", "Speech team results", "Overall school sweepstakes",   # TODO: Add back in team results.
     "Accounting", "Computer Applications", "Current Issues and Events", "Literary Criticism",
     "Ready Writing", "Social Studies", "Spelling", "Calculator Applications", "Computer Science",
     "Mathematics", "Number Sense", "Science", "Copy Editing", "Editorial", "Feature Writing",

@@ -1,8 +1,10 @@
 import sqlite3
 import pandas as pd
 
+from backend.constants.db_path import DB_PATH
+
 # Connect to SQLite DB
-conn = sqlite3.connect("testing/test.db")
+conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 # -------------------------

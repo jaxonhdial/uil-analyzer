@@ -112,8 +112,9 @@ def normalize_individual_df(df, year, event_name, conference, level_name, level_
         'Written': 'score',     # Used For Computer Science
         'AccuracyScore': 'tiebreaker',
         'Objective': 'objective_score',
-        'Essay': 'essay_score',
+        'EssayScore': 'essay_score',
         'ScoresTotaled': 'score',    # Used for Current Events and Social Studies
+        'ScienceTotal': 'score',     # Used for Science
         'Biology': 'biology_score',
         'Chemistry': 'chemistry_score',
         'Physics': 'physics_score',
