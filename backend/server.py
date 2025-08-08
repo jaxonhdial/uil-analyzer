@@ -1,10 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 from backend.api import archives_api
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
-    # Register all blueprints
     app.register_blueprint(archives_api.bp)
 
     return app

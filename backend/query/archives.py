@@ -49,6 +49,8 @@ def process_results_df(df, is_team=False):
     # Replace NaN in Points with an empty string
     if 'Points' in df.columns:
         df['Points'] = df['Points'].apply(lambda x: '' if pd.isna(x) or x == 0 else x)
+    if 'Essay' in df.columns:
+        df['Essay'] = df['Essay'].apply(lambda x: '' if pd.isna(x) or x == 0 else x)
 
     return df[present_cols], present_cols
 

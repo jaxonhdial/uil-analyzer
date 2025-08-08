@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
             event: event,
             conference: conference,
             level: level,
-            levelInput: levelInput
+            level_input: levelInput
         };
 
         console.log("Sending parameters to server: ", payload);
@@ -125,7 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const queryParams = new URLSearchParams(payload).toString();
-            const response = await fetch(`http://127.0.0.1:5000/get_archives?${queryParams}`);
+            const url = `http://127.0.0.1:5000/get_archives?${queryParams}`;
+            console.log(url);
+            const response = await fetch(url);
 
             if (!response.ok) {
                 throw new Error("Failed to retrieve JSON from API");
@@ -133,8 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
 
-            renderTable("individualTableContainer", data.individual_results);
-            renderTable("teamTableContainer", data.team_results);
+            renderName("tableTitle", payload);
+            renderTable("individualTableContainer", data.individual_results, data.individual_columns);
+            renderTable("teamTableContainer", data.team_results, data.team_columns);
 
             console.log("Data loaded successfully!");
         }
@@ -143,10 +146,24 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Something went wrong during API fetch. Check console for details.");
         }
         finally {
-            submitBnt.disabled = false;
+            submitBtn.disabled = false;
         }
     });
 
+
+    /**
+     * Renders the name of the competition to the screen above the tables (e.g. 2024 Conference 5A Region 1 Computer Science)
+     * @param {*} payload Gives the Year, Conference, Event, Level, and Level Input
+     */
+    function renderName(containerId, payload) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        const title = document.createElement("h2");
+        title.textContent = `${payload.year} Conference ${payload.conference}A ${payload.level.charAt(0).toUpperCase() + payload.level.slice(1)} ${payload.level_input} ${payload.event}`;
+
+        container.appendChild(title);
+    }
 
     /**
      * adds table elements to HTML to display
@@ -154,21 +171,25 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {*} containerId Div container in HTML where table will be displayed
      * @param {*} data JSON of table data
      */
-    function renderTable(containerId, data) {
+    function renderTable(containerId, data, columns = null) {
         const container = document.getElementById(containerId);
         container.innerHTML = "";   // Clear previous
 
         if (!data.length) {
-            container.innerHTML = "<p>No data found</p>";
+            container.innerHTML = "<p>No team results for this event.</p>";
             return;
         }
+
+        const typeOfResult = document.createElement("h3");
+        typeOfResult.textContent = containerId.startsWith("individual") ? "Individual Results" : "Team Results";
 
         const table = document.createElement("table");
         const thead = document.createElement("thead");
         const tbody = document.createElement("tbody");
 
-        //Create header row
-        const headers = Object.keys(data[0]);
+        const headers = columns || Object.keys(data[0]);
+
+        // Create header row
         const trHead = document.createElement("tr");
         headers.forEach(h => {
             const th = document.createElement("th");
@@ -182,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const tr = document.createElement("tr");
             headers.forEach(h => {
                 const td = document.createElement("td");
-                td.textContent = row[h];
+                td.textContent = row[h] ?? ""; // fallback empty string
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
@@ -190,6 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         table.appendChild(thead);
         table.appendChild(tbody);
+        container.appendChild(typeOfResult);
         container.appendChild(table);
     }
+
 });
