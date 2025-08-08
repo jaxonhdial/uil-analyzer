@@ -79,22 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /**
-     * Scrapes tables and displays on UI
+     * Displays archives to UI
      */
-    document.getElementById("scrapeForm").addEventListener("submit", async (e) => {
-        console.log("Start Scraping...");
+    document.getElementById("archivesForm").addEventListener("submit", async (e) => {
+        console.log("Checking parameters");
 
         e.preventDefault(); // Prevent page reload since that's submit's default
 
         const form = e.target;
 
         const year = form.year.value;
-        const event = form.event.value;
+        const event = form.event.value.trim();
         const conference = form.conference.value;
         const level = form.level.value;
         const levelInput = level === "district" ? form.districtInput.value 
                             : level === "region" ? form.regionInput.value 
-                            : level === "state" ? "1" : "";
+                            : level === "state" ? 1 : null;
 
         // Checks that all fields are completed
         if (!conference) {
@@ -118,19 +118,17 @@ document.addEventListener("DOMContentLoaded", () => {
             levelInput: levelInput
         };
 
-        console.log("Sending paylod to server: ", payload);
+        console.log("Sending parameters to server: ", payload);
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/scrape", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            });
+            const queryParams = new URLSearchParams(payload).toString();
+            const response = await fetch(`http://127.0.0.1:5000/get_archives?${queryParams}`);
 
             if (!response.ok) {
-                throw new Error("Failed to scrape data");
+                throw new Error("Failed to retrieve JSON from API");
             }
 
             const data = await response.json();
@@ -141,8 +139,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Data loaded successfully!");
         }
         catch (error) {
-            console.error("Scrape failed:", error);
-            alert("Something went wrong during scraping. Check console for details.");
+            console.error("API Fetch failed:", error);
+            alert("Something went wrong during API fetch. Check console for details.");
+        }
+        finally {
+            submitBnt.disabled = false;
         }
     });
 
@@ -164,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const table = document.createElement("table");
         const thead = document.createElement("thead");
-        const tbody = document.createElementNS("tbody");
+        const tbody = document.createElement("tbody");
 
         //Create header row
         const headers = Object.keys(data[0]);
