@@ -1,8 +1,5 @@
 import argparse
-from backend.populate.scrape_uil_archives import (
-    scrape_individual_uil_archives,
-    scrape_team_uil_archives,
-)
+from backend.populate.scrape_uil_archives import scrape_uil_archives
 from backend.populate.scrape_speechwire import scrape_speechwire
 from backend.populate.populate_db import insert_individual_results, insert_team_results
 
@@ -35,8 +32,7 @@ def scrape_and_insert(year, event, conference, level, level_input):
     print(f"\n🔎 Scraping: year={year} event={event} conference={conference} level={level} level_input={level_input}")
 
     if year in UIL_ARCHIVE_YEARS:
-        indiv_df = scrape_individual_uil_archives(year, event, conference, level, level_input)
-        team_df = scrape_team_uil_archives(year, event, conference, level, level_input)
+        indiv_df, team_df = scrape_uil_archives(year, event, conference, level, level_input)
     elif year in SPEECHWIRE_YEARS:
         indiv_df, team_df = scrape_speechwire(year, event, conference, level, level_input)
     else:
