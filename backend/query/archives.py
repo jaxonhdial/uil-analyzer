@@ -1,9 +1,7 @@
 from backend.query.query_db import get_contest_results
+import pandas as pd
 
-def format_archives_results(year, conference, event_name, level, level_input, is_team=False):
-    # Fetch raw results from the database
-    df = get_contest_results(year, conference, event_name, level, level_input, is_team)
-    
+def process_results_df(df, is_team=False):
     if df is None or df.empty:
         return df
 
@@ -45,9 +43,19 @@ def format_archives_results(year, conference, event_name, level, level_input, is
             "Biology", "Chemistry", "Physics", "Score", "Tiebreaker", "Points", "Advance?"
         ]
 
-    # Apply renaming
     df = df.rename(columns=rename_map)
-
-    # Select only the present columns in correct order
     present_cols = [col for col in column_order if col in df.columns]
-    return df[present_cols]
+
+    # Replace NaN in Points with an empty string
+    if 'Points' in df.columns:
+        df['Points'] = df['Points'].apply(lambda x: '' if pd.isna(x) or x == 0 else x)
+
+    return df[present_cols], present_cols
+
+
+def format_archives_results(year, conference, event_name, level, level_input, is_team=False):
+    df = get_contest_results(year, conference, event_name, level, level_input, is_team)
+    if df is None or df.empty:
+        return df, []
+    
+    return process_results_df(df, is_team)
