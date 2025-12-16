@@ -73,11 +73,16 @@ def scrape_individual_table(soup):
 
 def scrape_team_table(soup, is_science):
     tables = soup.find_all("table")
-    if len(tables) < 2:
-        return pd.DataFrame()
-    team_table = tables[1]
-    if is_science:
+    team_table = None
+
+    if is_science and len(tables) >= 3:
         team_table = tables[2]
+    elif not is_science and len(tables) >= 2:
+        team_table = tables[1]
+    
+    if team_table is None:
+        return pd.DataFrame()
+
     rows = team_table.find_all("tr")
     headers = [td.get_text(strip=True) for td in rows[0].find_all("td")]
     data = []

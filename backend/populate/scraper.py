@@ -76,32 +76,73 @@ def expand_param(param, valid_values):
 def main():
     parser = argparse.ArgumentParser(description="UIL Archives Scraper")
     parser.add_argument('--year', type=str, default='all')
-    parser.add_argument('--event', type=str, default='Computer Science')
-    parser.add_argument('--conference', type=str, default='5')
-    parser.add_argument('--level', type=str, default='district')
+    parser.add_argument('--event', type=str, default='all')
+    parser.add_argument('--conference', type=str, default='all')
+    parser.add_argument('--level', type=str, default='all')
     parser.add_argument('--level_input', type=str, default='all')
+    parser.add_argument('--use_checkpoint', action='store_true')
     args = parser.parse_args()
 
-    years = VALID_YEARS if args.year == 'all' else [int(args.year)]
-    events = expand_param(args.event, DEFAULT_EVENTS)
-    conferences = expand_param(args.conference, DEFAULT_CONFERENCES)
-    levels = expand_param(args.level, DEFAULT_LEVELS)
+    # NOTE: This is only used in case of failure in the middle 
+    # of a scrape to pick up where we left off
+    # Edit this on failure
+    if args.use_checkpoint:
+        years = list(range(2025, 2026))
+        events = [
+            "Persuasive Speaking", "Lincoln Douglas Debate", "Poetry Interpretation", "Prose Interpretation"
+        ]
+        conferences = ['1', '2', '3', '4', '5', '6']
+        levels = ['district', 'region', 'state']
+        level_inputs = [str(i) for i in range(10, 33)]
+        scrape_order_id = 40284
+    else:
+        years = VALID_YEARS if args.year == 'all' else [int(args.year)]
+        events = expand_param(args.event, DEFAULT_EVENTS)
+        conferences = expand_param(args.conference, DEFAULT_CONFERENCES)
+        levels = expand_param(args.level, DEFAULT_LEVELS)
+        level_inputs = VALID_LEVEL_INPUTS.get(levels[0], ['1']) if args.level_input == 'all' else [args.level_input]
+        scrape_order_id = 0
+    
+    # Event, Year, Conference, Level, Level Input
+    first_pass_completed = [False, False, False, False, False]
 
-    scrape_order_id = 0
-
+    if first_pass_completed[0]:
+        events = expand_param(args.event, DEFAULT_EVENTS)
+    else:
+        first_pass_completed[0] = True
     for event in events:
-        for year in years:
-            for conference in conferences:
-                for level in levels:
-                    if year == 2020 and level in ("region", "state"):
-                        continue
+        if first_pass_completed[1]:
+            years = VALID_YEARS if args.year == 'all' else [int(args.year)]
+        else:
+            first_pass_completed[1] = True
 
-                    level_inputs = VALID_LEVEL_INPUTS.get(level, ['1']) if args.level_input == 'all' else [args.level_input]
+        for year in years:
+            if first_pass_completed[2]:
+                conferences = expand_param(args.conference, DEFAULT_CONFERENCES)
+            else:
+                first_pass_completed[2] = True
+            
+            for conference in conferences:
+                if first_pass_completed[3]:
+                    levels = expand_param(args.level, DEFAULT_LEVELS)
+                else:
+                    first_pass_completed[3] = True
+                
+                for level in levels:
+                    if year == 2020:
+                        continue
+                    
+                    if first_pass_completed[4]:
+                        level_inputs = VALID_LEVEL_INPUTS.get(level, ['1']) if args.level_input == 'all' else [args.level_input]
+                    else:
+                        first_pass_completed[4] = True
 
                     for level_input in level_inputs:
                         scrape_order_id += 1
                         scrape_and_insert(year, event, conference, level, level_input, scrape_order_id)
                         time.sleep(1)
+
+                    
 
     print("🎉 Scraping complete.")
 
