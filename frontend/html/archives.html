@@ -3,113 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archives</title>
+    <title>Archives - UIL Analyzer</title>
+
+    <!-- Global styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="../css/pages/archives.css">
 </head>
 <body>
-    <h1 class="title">Archives</h1>
-    <p><a href="index.html">Return to home page</a></p>
 
-    <form id="archivesForm">
-        <div class="form-group">
-            <label for="year">Choose a year:</label>
-            <select name="year" id="year">
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-            </select>
+    <!-- Top ribbon -->
+    <header class="top-bar">
+        <a href="index.html" class="logo" >UIL Analyzer</a>
+        <nav class="nav-links">
+            <a href="archives.html">Archives</a>
+            <a href="virtual-contest.html">Virtual Contest</a>
+            <a href="search.html">Search</a>
+            <a href="live-results.html">Live Results</a>
+            <a href="alignments.html">Alignments</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <main class="archives-page">
+
+        <div class="archives-layout">
+            <!-- Left sidebar for filters -->
+            <aside class="archives-sidebar">
+                <h1 class="title">Archives</h1>
+                <form id="archivesForm">
+
+                    <!-- Year dropdown only -->
+                    <div class="form-group">
+                        <select name="year" id="year">
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                            <option value="2017">2017</option>
+                            <option value="2016">2016</option>
+                            <option value="2015">2015</option>
+                        </select>
+                    </div>
+
+                    <!-- Event dropdown only -->
+                    <div class="form-group">
+                        <select name="event" id="event">
+                            <option value="Accounting">Accounting</option>
+                            <option value="Calculator Applications">Calculator Applications</option>
+                            <option value="Computer Applications">Computer Applications</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Copy Editing">Copy Editing</option>
+                            <option value="Current Issues and Events">Current Issues and Events</option>
+                            <option value="Editorial">Editorial</option>
+                            <option value="Feature Writing">Feature Writing</option>
+                            <option value="Headline Writing">Headline Writing</option>
+                            <option value="Informative Speaking">Informative Speaking</option>
+                            <option value="Lincoln Douglas Debate">Lincoln Douglas Debate</option>
+                            <option value="Literary Criticism">Literary Criticism</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="News Writing">News Writing</option>
+                            <option value="Number Sense">Number Sense</option>
+                            <option value="Persuasive Speaking">Persuasive Speaking</option>
+                            <option value="Poetry Interpretation">Poetry Interpretation</option>
+                            <option value="Prose Interpretation">Prose Interpretation</option>
+                            <option value="Ready Writing">Ready Writing</option>
+                            <option value="Science">Science</option>
+                            <option value="Social Studies">Social Studies</option>
+                            <option value="Spelling">Spelling</option>
+                        </select>
+                    </div>
+
+                    <!-- Conference and Level fieldsets unchanged -->
+
+                    <fieldset id="conference-fieldset">
+                        <legend>Conference</legend>
+                        <div class="radio-group">
+                            <label><input type="radio" name="conference" value="1">1A</label>
+                            <label><input type="radio" name="conference" value="2">2A</label>
+                            <label><input type="radio" name="conference" value="3">3A</label>
+                            <label><input type="radio" name="conference" value="4">4A</label>
+                            <label><input type="radio" name="conference" value="5">5A</label>
+                            <label><input type="radio" name="conference" value="6">6A</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="level-fieldset">
+                        <legend>Level</legend>
+                        <div class="level-option">
+                            <label for="levelDistrict">
+                                <input type="radio" id="levelDistrict" name="level" value="district">
+                                District Results
+                            </label>
+                            <div id="districtInputContainer" style="display: none">
+                                <input type="number" min="1" max="32" id="districtInput" name="districtInput" value="">
+                            </div>
+                        </div>
+
+                        <div class="level-option">
+                            <label for="levelRegion">
+                                <input type="radio" id="levelRegion" name="level" value="region">
+                                Region Results
+                            </label>
+                            <div id="regionInputContainer" style="display: none">
+                                <input type="number" min="1" max="4" id="regionInput" name="regionInput" value="">
+                            </div>
+                        </div>
+
+                        <div class="level-option">
+                            <label for="levelState">
+                                <input type="radio" id="levelState" name="level" value="state">
+                                State Results
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="actions">
+                        <button type="submit" id="showTableBtn" class="ui-card search-button">Search</button>
+                    </div>
+
+                </form>
+            </aside>
+
+
+            <!-- Right content for table -->
+            <section class="archives-table">
+                <div id="tableTitle"></div>
+                <div id="individualTableContainer"></div>
+                <div id="teamTableContainer"></div>
+            </section>
         </div>
+    </main>
 
-        <div class="form-group">
-            <label for="event">Choose an event:</label>
-            <select name="event" id="event">
-                <option value="Accounting">Accounting</option>
-                <option value="Calculator Applications">Calculator Applications</option>
-                <option value="Computer Applications">Computer Applications</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Copy Editing">Copy Editing</option>
-                <option value="Current Issues and Events">Current Issues and Events</option>
-                <option value="Editorial">Editorial</option>
-                <option value="Feature Writing">Feature Writing</option>
-                <option value="Headline Writing">Headline Writing</option>
-                <option value="Informative Speaking">Informative Speaking</option>
-                <option value="Lincoln Douglas Debate">Lincoln Douglas Debate</option>
-                <option value="Literary Criticism">Literary Criticism</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="News Writing">News Writing</option>
-                <option value="Number Sense">Number Sense</option>
-                <option value="Persuasive Speaking">Persuasive Speaking</option>
-                <option value="Poetry Interpretation">Poetry Interpretation</option>
-                <option value="Prose Interpretation">Prose Interpretation</option>
-                <option value="Ready Writing">Ready Writing</option>
-                <option value="Science">Science</option>
-                <option value="Social Studies">Social Studies</option>
-                <option value="Spelling">Spelling</option>
-                <!-- TODO: Add back in team results 
-                <option value="Overall school sweepstakes">Overall school sweepstakes</option>
-                <option value="Speech team results">Speech team results</option>
-                <option value="Journalism team results">Journalism team results</option> 
-                -->
-            </select>
-        </div>
-
-        <fieldset id="conference-fieldset">
-            <legend>Conference</legend>
-            <label><input type="radio" name="conference" value="1">1A</label>
-            <label><input type="radio" name="conference" value="2">2A</label>
-            <label><input type="radio" name="conference" value="3">3A</label>
-            <label><input type="radio" name="conference" value="4">4A</label>
-            <label><input type="radio" name="conference" value="5">5A</label>
-            <label><input type="radio" name="conference" value="6">6A</label>
-        </fieldset>
-        
-        <fieldset id="level-fieldset">
-            <legend>Level</legend>
-            <div class="level-option">
-                <label for="levelDistrict">
-                    <input type="radio" id="levelDistrict" name="level" value="district">
-                    District Results
-                </label>
-                <div id="districtInputContainer" style="display: none">
-                    <input type="number" min="1" max="32" id="districtInput" name="districtInput" placeholder="Enter District Number..." value="">
-                </div>
-            </div>
-
-            <div class="level-option">
-                <label for="levelRegion">
-                    <input type="radio" id="levelRegion" name="level" value="region">
-                    Region Results
-                </label>
-                <div id="regionInputContainer" style="display: none">
-                    <input type="number" min="1" max="4" id="regionInput" name="regionInput" placeholder="Enter Region Number..." value="">
-                </div>
-            </div>
-
-            <div class="level-option">
-                <label for="levelState">
-                    <input type="radio" id="levelState" name="level" value="state">
-                    State Results
-                </label>
-            </div>
-        </fieldset>
-
-        <div class="actions">
-            <!--Exports the table as a csv and shows the table on the screen-->
-            <button type="submit" id="showTableBtn">Search</button>
-        </div>
-        
-    </form>
-
-    <div id="tableTitle"></div>
-    <div id="individualTableContainer"></div>
-    <div id="teamTableContainer"></div>
 
     <script src="../js/archives.js"></script>
 </body>

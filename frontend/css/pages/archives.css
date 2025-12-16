@@ -1,0 +1,187 @@
+table {
+    margin: 0px 0px 0px 0px;
+} 
+
+/* Make the header fixed */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px; /* match your header height */
+    z-index: 1000;
+}
+
+/* Offset the main content to start below the header */
+.archives-page {
+    padding-top: 64px; /* same as header height */
+    height: 100vh;
+    display: flex;
+    overflow: hidden; /* overall page doesn’t scroll */
+}
+
+/* Layout: sidebar + table */
+.archives-layout {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+    overflow: hidden; /* prevent overall layout scrolling */
+}
+
+/* Sidebar scrolls if needed */
+.archives-sidebar {
+    flex: 0 0 280px; /* reduced from 240px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-top: 20px;
+    max-height: 100%;
+    overflow-y: auto; /* allow vertical scrolling if needed */
+}
+
+
+/* Table scrolls independently */
+.archives-table {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 16px;
+    margin: 0px 0px 0px 0px;
+}
+
+.archives-table h2, 
+.archives-table h3 {
+    margin: 8px 0 0 0; /* top margin 8px, bottom margin 0 */
+} 
+
+/* Center the select dropdowns */
+.archives-sidebar .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Center fieldsets */
+.archives-sidebar fieldset {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 2px solid var(--primary);
+    border-radius: var(--border-radius);
+    text-align: center; /* center content inside fieldset */
+}
+
+/* Center the Search button */
+.archives-sidebar .actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Center text inside Year and Event dropdowns */
+.archives-sidebar select {
+    width: 240px; /* fixed width for centering */
+    text-align: center;
+    text-align-last: center;
+
+    /* Remove native arrow */
+    -webkit-appearance: none;  /* Chrome/Safari */
+    -moz-appearance: none;     /* Firefox */
+    appearance: none;
+    padding-right: 10px;       /* add some right padding for spacing */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpolygon points='0,0 10,0 5,6' fill='%23333'/%3E%3C/svg%3E"); /* optional custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 10px;
+}
+
+/* Keep previous fieldset and radio styling */
+fieldset {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 2px solid var(--primary);
+    border-radius: var(--border-radius);
+}
+
+fieldset legend {
+    font-weight: 700;
+}
+
+.radio-group, .level-option {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+#conference-fieldset .radio-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    gap: 12px;           /* spacing between buttons */
+    justify-items: stretch; /* stretch each button to fill its column */
+    justify-content: center; /* center the grid in the fieldset */
+}
+
+.radio-group label, .level-option label {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#conference-fieldset .radio-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    gap: 12px;           /* spacing between buttons */
+    justify-items: stretch; /* stretch each button to fill its column */
+    justify-content: center; /* center the grid in the fieldset */
+}
+
+/* Level options radio + input: slightly more space */
+.level-option {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* increased from 6px */
+    margin-bottom: 8px;
+}
+
+
+#conference-fieldset .radio-group label {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* center content inside each label */
+    gap: 4px;
+    padding: 4px 0; /* optional padding for a little height */
+}
+
+/* Remove number input spinners in most browsers */
+#districtInput,
+#regionInput {
+    -moz-appearance: textfield;  /* Firefox */
+}
+
+#districtInput::-webkit-inner-spin-button,
+#districtInput::-webkit-outer-spin-button,
+#regionInput::-webkit-inner-spin-button,
+#regionInput::-webkit-outer-spin-button {
+    -webkit-appearance: none;  /* Chrome, Safari, Edge */
+    margin: 0;
+}
+
+/* Keep the input small and centered */
+#districtInput,
+#regionInput {
+    width: 70px;
+    padding: 0px 0px;
+    font-size: 0.9rem;
+    text-align: center;    /* center the number */
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Keep logo styling the same when using <a> instead of <div> */
+.top-bar .logo {
+    text-decoration: none; /* remove underline */
+    color: inherit;        /* keep original text color */
+}
+
+

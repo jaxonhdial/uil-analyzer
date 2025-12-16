@@ -160,7 +160,17 @@ document.addEventListener("DOMContentLoaded", () => {
         container.innerHTML = "";
 
         const title = document.createElement("h2");
-        title.textContent = `${payload.year} Conference ${payload.conference}A ${payload.level.charAt(0).toUpperCase() + payload.level.slice(1)} ${payload.level_input} ${payload.event}`;
+
+        let levelText = "";
+        if (payload.level === "district") {
+            levelText = `District ${payload.level_input}`;
+        } else if (payload.level === "region") {
+            levelText = `Region ${payload.level_input}`;
+        } else if (payload.level === "state") {
+            levelText = "State"; // No number
+        }
+
+        title.textContent = `${payload.year} Conference ${payload.conference}A ${levelText} ${payload.event}`;
 
         container.appendChild(title);
     }
