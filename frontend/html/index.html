@@ -15,20 +15,10 @@
 </head>
 <body>
 
-    <!-- Top ribbon (shared across all pages) -->
-    <header class="top-bar">
-        <div class="logo">UIL Analyzer</div>
-        <nav class="nav-links">
-            <a href="archives.html">Archives</a>
-            <a href="virtual-contest.html">Virtual Contest</a>
-            <a href="search.html">Search</a>
-            <a href="live-results.html">Live Results</a>
-            <a href="alignments.html">Alignments</a>
-            <a href="about.html">About</a>
-        </nav>
-    </header>
+    <!-- Global navbar -->
+    <div id="navbar"></div>
 
-    <!-- Landing page content -->
+    <!-- Landing page -->
     <main class="home">
         <section class="home-grid">
 
@@ -39,28 +29,28 @@
                 </div>
             </button>
 
-            <button class="ui-card" onclick="location.href='virtual-contest.html'">
+            <button class="ui-card locked" data-lock>
                 <div class="ui-card-content">
                     <h3>Virtual Contest</h3>
                     <p>Enter your score into past contests</p>
                 </div>
             </button>
 
-            <button class="ui-card" onclick="location.href='search.html'">
+            <button class="ui-card locked" data-lock>
                 <div class="ui-card-content">
                     <h3>Search</h3>
                     <p>Find competitors or schools</p>
                 </div>
             </button>
 
-            <button class="ui-card" onclick="location.href='live-results.html'">
+            <button class="ui-card locked" data-lock>
                 <div class="ui-card-content">
                     <h3>Live Results</h3>
                     <p>View current contest results</p>
                 </div>
             </button>
 
-            <button class="ui-card" onclick="location.href='alignments.html'">
+            <button class="ui-card locked" data-lock>
                 <div class="ui-card-content">
                     <h3>Academic Alignments</h3>
                     <p>Check school academic alignments</p>
@@ -77,5 +67,7 @@
         </section>
     </main>
 
+    <!-- Global scripts -->
+    <script src="../js/loadNav.js"></script>
 </body>
 </html>

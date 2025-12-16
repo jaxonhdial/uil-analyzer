@@ -3,12 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About - UIL Analyzer</title>
+
+    <!-- Global styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="../css/pages/about.css">
 </head>
 <body>
-    <p><a href="index.html">Return to home page</a></p>
-    <h2>
-        My name is Jaxon!
-    </h2>
+
+    <!-- Global navbar -->
+    <div id="navbar"></div>
+
+    <main class="about-page">
+        <h1>About UIL Analyzer</h1>
+
+        <p>
+            <strong>UIL Analyzer</strong> is a searchable and filterable archive designed
+            to make past UIL academic competition results more accessible and easier
+            to explore.
+        </p>
+
+        <p>
+            UIL academic results have historically been fragmented across static
+            archives and year-specific result pages with limited filtering options.
+            UIL Analyzer centralizes this information into a single modern interface
+            that allows competitors, coaches, and teams to explore historical data
+            in meaningful ways.
+        </p>
+
+        <p>
+            UIL Analyzer is built by a competitor, for competitors, with a focus on
+            clarity, accessibility, and long-term usability.
+        </p>
+
+        <p>
+            <strong>Current Version:</strong> v0.1
+        </p>
+
+        <hr>
+
+        <h2>Core Features</h2>
+
+        <h3>Archives</h3>
+        <p>
+            The Archives page combines the benefits of the traditional UIL archive
+            system, where results were accessible on a single page, with the recency
+            and availability of SpeechWire results.
+        </p>
+        <p>
+            Users can filter results by year, event, conference, and competition
+            level, making it easier to locate specific contests and placements.
+        </p>
+
+        <h3>Virtual Contest <em>(Coming Soon)</em></h3>
+        <p>
+            The Virtual Contest feature allows users to combine results from multiple
+            archives into a single simulated contest.
+        </p>
+        <ul>
+            <li>Compare how you would place across all districts in a region</li>
+            <li>Compare one school’s performance across different conferences</li>
+            <li>See how you would have performed at a contest from a previous year</li>
+        </ul>
+
+        <h3>Competitor & School Search <em>(Coming Soon)</em></h3>
+        <p>
+            Search for a competitor or school and view every recorded appearance
+            across past years and competitions. This feature is designed to make
+            long-term performance trends easier to identify.
+        </p>
+
+        <h3>Live Results <em>(Coming Soon)</em></h3>
+        <p>
+            View which events have posted results for a given year in real time.
+        </p>
+        <ul>
+            <li><strong>Green:</strong> Results are available</li>
+            <li><strong>Red:</strong> Results have not yet been posted</li>
+        </ul>
+
+        <h3>Academic Alignments <em>(Coming Soon)</em></h3>
+        <p>
+            Search for a school to see its district and region placement, along
+            with all other schools in the same district. This simplifies alignment
+            lookups that are typically scattered across multiple UIL documents.
+        </p>
+
+        <hr>
+
+        <h2>Architecture</h2>
+
+        <h3>Frontend</h3>
+        <ul>
+            <li><strong>Technologies:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>Role:</strong> User interface for searching and comparing results</li>
+            <li><strong>Hosting:</strong> Netlify</li>
+        </ul>
+
+        <h3>Backend API</h3>
+        <ul>
+            <li><strong>Technologies:</strong> Python, Flask</li>
+            <li><strong>Role:</strong> Processes frontend queries and returns structured JSON</li>
+            <li><strong>Hosting:</strong> Render</li>
+        </ul>
+
+        <h3>Data Query Layer</h3>
+        <ul>
+            <li><strong>Technologies:</strong> Python, Pandas</li>
+            <li><strong>Role:</strong> Queries the database and converts results into DataFrames</li>
+        </ul>
+
+        <h3>Data Population</h3>
+        <ul>
+            <li><strong>Technologies:</strong> Python, Pandas, BeautifulSoup</li>
+            <li><strong>Role:</strong> Scrapes official UIL archives to populate the database</li>
+        </ul>
+
+        <h3>Database</h3>
+        <ul>
+            <li><strong>Technology:</strong> SQLite</li>
+            <li><strong>Role:</strong> Primary data source storing all UIL competition results</li>
+        </ul>
+
+        <hr>
+
+        <h2>Project Links</h2>
+        <ul>
+            <li>
+                <strong>Project Roadmap:</strong>
+                <a href="https://miro.com/app/board/uXjVJXft0ME=/?share_link_id=984844134323" target="_blank">
+                    View Roadmap
+                </a>
+            </li>
+        </ul>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/loadNav.js"></script>
 </body>
 </html>

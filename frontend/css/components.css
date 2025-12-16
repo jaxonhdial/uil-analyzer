@@ -158,4 +158,20 @@ th {
     }
 }
 
+/* Keep logo styling the same when using <a> instead of <div> */
+.top-bar .logo {
+    text-decoration: none; /* remove underline */
+    color: inherit;        /* keep original text color */
+}
+
+.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.locked::after {
+    content: " 🔒";
+}
+
+
 

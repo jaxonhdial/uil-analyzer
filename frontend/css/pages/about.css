@@ -1,0 +1,27 @@
+/* Center and constrain About page content */
+        .about-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px 64px;
+        }
+
+        /* Align bullet lists with paragraph text */
+        .about-page ul {
+            padding-left: 0;
+            margin-left: 0;
+            list-style-position: inside;
+        }
+
+        .about-page li {
+            margin-left: 0;
+            margin-bottom: 6px;
+        }
+
+        /* Add spacing above section headers */
+        .about-page h2 {
+            margin-top: 32px;
+        }
+
+        .about-page h3 {
+            margin-top: 20px;
+        }

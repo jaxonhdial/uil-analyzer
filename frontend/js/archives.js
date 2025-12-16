@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
     const districtRadio = document.getElementById("levelDistrict");
     const regionRadio = document.getElementById("levelRegion");
