@@ -4,16 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIL Analyzer</title>
+
+    <!-- Global styles -->
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="../css/pages/home.css">
 </head>
 <body>
-    <h1 class="title">UIL Analyzer</h1>
-    <ul>
-        <li><a href="archives.html">Archives</a></li>
-        <li><a href="virtual-contest.html">Virtual Contest</a></li>
-        <li><a href="search.html">Search for a Competitor or School</a></li>
-        <li><a href="live-results.html">Live Results</a></li>
-        <li><a href="alignments.html">Academic Alignments</a></li>
-        <li><a href="about.html">About</a></li>
-    </ul>
+
+    <!-- Top ribbon (shared across all pages) -->
+    <header class="top-bar">
+        <div class="logo">UIL Analyzer</div>
+        <nav class="nav-links">
+            <a href="archives.html">Archives</a>
+            <a href="virtual-contest.html">Virtual Contest</a>
+            <a href="search.html">Search</a>
+            <a href="live-results.html">Live Results</a>
+            <a href="alignments.html">Alignments</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <!-- Landing page content -->
+    <main class="home">
+        <section class="home-grid">
+
+            <button class="ui-card" onclick="location.href='archives.html'">
+                <div class="ui-card-content">
+                    <h3>Archives</h3>
+                    <p>Browse past UIL results and tests</p>
+                </div>
+            </button>
+
+            <button class="ui-card" onclick="location.href='virtual-contest.html'">
+                <div class="ui-card-content">
+                    <h3>Virtual Contest</h3>
+                    <p>Participate in online contests</p>
+                </div>
+            </button>
+
+            <button class="ui-card" onclick="location.href='search.html'">
+                <div class="ui-card-content">
+                    <h3>Search</h3>
+                    <p>Find competitors or schools</p>
+                </div>
+            </button>
+
+            <button class="ui-card" onclick="location.href='live-results.html'">
+                <div class="ui-card-content">
+                    <h3>Live Results</h3>
+                    <p>View current contest results</p>
+                </div>
+            </button>
+
+            <button class="ui-card" onclick="location.href='alignments.html'">
+                <div class="ui-card-content">
+                    <h3>Academic Alignments</h3>
+                    <p>Check team and school alignments</p>
+                </div>
+            </button>
+
+            <button class="ui-card" onclick="location.href='about.html'">
+                <div class="ui-card-content">
+                    <h3>About</h3>
+                    <p>Learn more about UIL Analyzer</p>
+                </div>
+            </button>
+
+        </section>
+    </main>
+
 </body>
 </html>

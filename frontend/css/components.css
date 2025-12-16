@@ -1,0 +1,51 @@
+/* ============================
+   UI Card Button
+============================ */
+
+.ui-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    padding: 20px;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 2px solid var(--primary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 1rem;
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
+}
+
+/* Hover effect: compress and darken border */
+.ui-card:hover {
+    transform: scale(0.97);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    border-color: var(--primary-light);
+}
+
+/* Remove default button styling */
+.ui-card {
+    background-clip: padding-box;
+    outline: none;
+}
+
+/* ============================
+   Content
+============================ */
+
+.ui-card-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.ui-card-content p {
+    font-size: 0.85rem;
+    color: var(--muted-text);
+}

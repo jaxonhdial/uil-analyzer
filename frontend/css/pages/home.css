@@ -1,0 +1,36 @@
+/* ============================
+   Home Page Layout
+============================ */
+
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    gap: 24px;
+}
+
+/* ============================
+   Responsive Behavior
+============================ */
+
+@media (max-width: 900px) {
+    .home-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .home-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .ui-card {
+        width: 100%;
+    }
+}

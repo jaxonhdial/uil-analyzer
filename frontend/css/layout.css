@@ -1,0 +1,43 @@
+/* ============================
+   Top Navigation Bar
+============================ */
+
+.top-bar {
+    height: 64px;
+    padding: 0 32px;
+    background-color: var(--primary);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* ============================
+   Navigation Links
+============================ */
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: #e5e7eb;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+/* ============================
+   Page Layout
+============================ */
+
+main {
+    min-height: calc(100vh - 64px);
+    padding: 40px 24px;
+}
