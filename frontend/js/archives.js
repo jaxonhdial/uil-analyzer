@@ -125,8 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
         submitBtn.disabled = true;
 
         try {
+            const API_BASE = process.env.API_BASE || "http://127.0.0.1:5000";
             const queryParams = new URLSearchParams(payload).toString();
-            const url = `http://127.0.0.1:5000/get_archives?${queryParams}`;
+            const url = `${API_BASE}/get_archives?${queryParams}`;
             console.log(url);
             const response = await fetch(url);
 
